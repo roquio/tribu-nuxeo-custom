@@ -1,0 +1,17 @@
+<component name="foad.types">
+
+	<require>org.nuxeo.ecm.core.schema.TypeService</require>
+	<require>org.nuxeo.ecm.platform.types.TypeService</require>
+	<require>fr.toutatice.ecm.platform.customize.base.types</require>
+
+	<extension target="org.nuxeo.ecm.core.schema.CustomizeTypesService"
+		point="basettc">
+
+		<doctype name="*" append="true">
+			<schema name="foad_doc" />
+		</doctype>
+		
+	</extension>
+	
+
+</component>

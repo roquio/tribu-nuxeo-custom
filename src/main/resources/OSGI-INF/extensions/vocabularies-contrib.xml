@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<component name="foad.vocabularies">
+
+	<extension target="org.nuxeo.ecm.directory.sql.SQLDirectoryFactory"
+		point="directories">
+
+		<directory name="Academie">
+			<schema>vocabulary</schema>
+			<dataSource>java:/nxsqldirectory</dataSource>
+			<table>foad_academie</table>
+			<idField>id</idField>
+			<autoincrementIdField>false</autoincrementIdField>
+			<createTablePolicy>on_missing_columns</createTablePolicy>
+			<dataFile>vocabularies/foad_academie.csv</dataFile>
+			<cacheTimeout>3600</cacheTimeout>
+			<cacheMaxSize>1000</cacheMaxSize>
+		</directory>
+	</extension>
+
+</component>

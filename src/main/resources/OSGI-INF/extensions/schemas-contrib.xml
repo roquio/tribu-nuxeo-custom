@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<component name="foad.schemas">
+
+	<require>org.nuxeo.ecm.core.schema.TypeService</require>
+
+	<extension target="org.nuxeo.ecm.core.schema.TypeService"
+		point="schema">
+
+		<schema name="foad_doc" prefix="foad"
+			src="schemas/foad_doc.xsd" />
+
+	</extension>
+
+</component>

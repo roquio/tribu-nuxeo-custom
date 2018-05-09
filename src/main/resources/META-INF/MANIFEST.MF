@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 1
+Bundle-Name: Foad specific custom 
+Bundle-SymbolicName: foad.nuxeo.custom;singleton:=true
+Bundle-Localization: plugin
+Bundle-Category: stateful
+Nuxeo-Component: OSGI-INF/extensions/layouts-contrib.xml, 
+ OSGI-INF/extensions/schemas-contrib.xml,
+ OSGI-INF/extensions/types-contrib.xml,
+ OSGI-INF/extensions/vocabularies-contrib.xml,
+ 
