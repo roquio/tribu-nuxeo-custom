@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<component
+	name="foad.automation" version="1.0">
+
+	<require>org.nuxeo.ecm.core.operation.OperationServiceComponent
+	</require>
+	
+	<require>org.nuxeo.ecm.automation.server.AutomationServer</require>
+
+	<extension
+		target="org.nuxeo.ecm.core.operation.OperationServiceComponent"
+		point="operations">
+
+		<operation
+			class="fr.gouv.education.foad.bns.GetDuplicateFiles" />
+
+	</extension>
+
+</component>

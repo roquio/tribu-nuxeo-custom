@@ -45,5 +45,25 @@
 			</plugin> 		
 		</plugins>			
 	</build>
+	
+	<dependencies>
+		<dependency>
+			<groupId>opentoutatice-ecm.platform</groupId>
+			<artifactId>opentoutatice-ecm-platform-core</artifactId>
+			<version>4.4.19.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.nuxeo.elasticsearch</groupId>
+			<artifactId>nuxeo-elasticsearch-core</artifactId>
+			<version>6.1.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.elasticsearch</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>1.1.2</version>
+		</dependency>	
+	</dependencies>
 
 </project>
