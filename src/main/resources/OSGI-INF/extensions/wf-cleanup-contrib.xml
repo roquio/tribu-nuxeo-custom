@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<component name="foad.wf.cleanup">
+
+  <require>org.nuxeo.ecm.platform.routing.service</require>
+
+  <extension
+    target="org.nuxeo.ecm.platform.scheduler.core.service.SchedulerRegistryService"
+    point="schedule">
+
+    <schedule id="proceduresInstancesAndWfCleanup">
+      <eventId>proceduresInstancesAndWfCleanup</eventId>
+      <!-- every hour -->
+      <cronExpression>0 */30 * * * ?</cronExpression>
+    </schedule>
+   </extension>
+
+  <extension target="org.nuxeo.ecm.core.event.EventServiceComponent"
+    point="listener">
+    
+    <listener name="proceduresInstancesAndWfCleanup" async="false"
+      class="fr.gouv.education.foad.wf.cleaner.TtcWfCleanerListener">
+      <event>proceduresInstancesAndWfCleanup</event>
+    </listener>
+  </extension>
+
+</component>
