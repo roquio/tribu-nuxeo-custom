@@ -47,7 +47,7 @@ public class TtcWfCleaner {
         private static final String TASK_RELATED = "SELECT * FROM Document WHERE ecm:mixinType = 'Task' AND nt:processId = '%s'"
               + " AND ecm:isVersion = 0";
         
-        private static final String OLD_PROC_INSTANCES = "SELECT * FROM Document WHERE primaryType = 'ProcedureInstance' AND dc:modified <= DATE '%s' ORDER BY dc:created";        
+        private static final String OLD_PROC_INSTANCES = "SELECT * FROM Document WHERE ecm:primaryType = 'ProcedureInstance' AND dc:modified <= DATE '%s' ORDER BY dc:created";        
 
 
         protected int i = 0, t = 0, p = 0;
@@ -97,7 +97,9 @@ public class TtcWfCleaner {
 							log.error("Failed to remove task "+task.getId());
 						}
 					}
-					log.info("Remove "+t+" task(s)");
+					if(t > 0) {
+						log.info("Remove "+t+" task(s)");
+					}
 					
 					try {
 						session.removeDocument(new IdRef(routeDocId));
