@@ -54,6 +54,8 @@ public class TtcWfCleaner {
         
         private static final String OLD_PROC_INSTANCES = "SELECT * FROM Document WHERE ecm:primaryType = 'ProcedureInstance' AND dc:modified <= DATE '%s' ORDER BY dc:created";        
 
+        private static final String PROC_INVIT_INSTANCES = "SELECT * FROM Document WHERE ecm:primaryType = 'ProcedureInstance' AND dc:created <= DATE '2021-10-02' AND pi:currentStep = 'invitation' ORDER BY dc:created";
+        
         // compteurs
         protected int i = 0, t = 0, p = 0;
         
@@ -161,6 +163,32 @@ public class TtcWfCleaner {
 					}
 				}
 				log.info("Remove "+p+" procedure(s). Unlink "+pErr+ " procedure(s) on ES ");
+				
+				// ==== Procédures avant la refonte hash numenv
+				queryBuilder.nxql(String.format(PROC_INVIT_INSTANCES));
+	    		queryBuilder.limit(proceduresLimit);
+            	
+				DocumentModelList oldInvits = service.query(queryBuilder);
+				procids = new ArrayList<>();
+				for (DocumentModel pi : oldInvits) {
+					procids.add(pi.getId());
+				}
+				
+				
+				for (String id : procids) {
+
+					try {
+						session.removeDocument(new IdRef(id));
+						p++;
+					}
+					catch(ClientException e) {
+						log.error("Failed to remove procedure invitation V1 "+id);
+						pErr++;
+						
+						unrefElasticsearchDoc(id);
+					}
+				}
+				log.info("Remove "+p+" procedure(s) invitation V1. Unlink "+pErr+ " procedure(s) on ES ");				
 	    		
 			}
 			else {
