@@ -295,10 +295,11 @@ public class TtcWfCleaner {
 			queryBuilder.limit(routesLimit);
 			DocumentModelList results = service.query(queryBuilder);
 
-			List<String> taskIds = new ArrayList<>();
+			List<String> taskProcessIds = new ArrayList<>();
 			for (DocumentModel result : results) {
 				StringProperty targetDocumentId = (StringProperty) result.getProperty("nt:targetDocumentId");
-				
+				StringProperty processId = (StringProperty) result.getProperty("nt:processId");
+
 
 				log.info("Check target document "+targetDocumentId.getValue());
 				
@@ -306,7 +307,7 @@ public class TtcWfCleaner {
 				DocumentModelList pis = service.query(queryBuilder);
 				
 				if(pis.size() == 0) {
-					taskIds.add(result.getId());
+					taskProcessIds.add(processId.getValue().toString());
 				}
 				else {
 					log.info("Skip task "+result.getId()+". A procedure is linked : "+pis.get(0).getId());
@@ -316,19 +317,24 @@ public class TtcWfCleaner {
 			}
 			
 			
-			for (String taskId : taskIds) {
+			for (String taskProcessId : taskProcessIds) {
+				
+				DocumentModelList tasks = session.query("SELECT * from TaskDoc where nt:processId = '"+taskProcessId+"' AND ecm:isVersion = 0");
+				
+				for(DocumentModel task : tasks) {
 
-				try {
-					session.removeDocument(new IdRef(taskId));
-					t++;
+					try {
+						session.removeDocument(new IdRef(task.getId()));
+						t++;
+					}
+					catch(ClientException e) {
+						log.error("Failed to remove task "+task.getId());
+						tErr++;
+						
+						
+					}
 				}
-				catch(ClientException e) {
-					log.error("Failed to remove task "+taskId);
-					tErr++;
-					
-					unrefElasticsearchDoc(taskId);
-					
-				}
+
 			}
 			
 			log.info("Remove "+t+" ended task(s). Unlink "+tErr+ " task(s) on ES ");
