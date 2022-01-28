@@ -20,6 +20,7 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
+import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.api.model.impl.primitives.StringProperty;
 import org.nuxeo.elasticsearch.api.ElasticSearchIndexing;
 import org.nuxeo.elasticsearch.api.ElasticSearchService;
@@ -63,6 +64,9 @@ public class TtcWfCleaner {
         private static final String PROC_RELATED = "SELECT * FROM Document WHERE ecm:primaryType = 'ProcedureInstance' AND ecm:uuid = '%s'";        
     	
         
+    	public static final String OLD_TASK_ENDED =  "SELECT * FROM TaskDoc WHERE ecm:currentLifeCycleState = 'ended' "
+                + " AND dc:created <= DATE '%s' ORDER BY dc:created";  
+        
         // compteurs
         protected int i = 0, t = 0, p = 0;
         
@@ -89,6 +93,8 @@ public class TtcWfCleaner {
 				removeClosedRoutes(service);
 				
 				removeOpenRoutes(service);
+				
+				removeEndedTasks(service);
 				
 	            
 	    		Date referenceDate = new Date();
@@ -273,7 +279,64 @@ public class TtcWfCleaner {
         }
         
         
-        
+
+		private void removeEndedTasks(ElasticSearchService service) {
+			
+    		Date referenceDate = new Date();
+    		Calendar c = Calendar.getInstance(); 
+    		c.setTime(referenceDate); 
+    		c.add(Calendar.MONTH, -2);
+    		referenceDate = c.getTime();
+    		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+    		String formattedDate = sdf.format(referenceDate);
+			
+			NxQueryBuilder queryBuilder = new NxQueryBuilder(session);
+			queryBuilder.nxql(String.format(OLD_TASK_ENDED, formattedDate));
+			queryBuilder.limit(routesLimit);
+			DocumentModelList results = service.query(queryBuilder);
+
+			List<String> taskIds = new ArrayList<>();
+			for (DocumentModel result : results) {
+				StringProperty targetDocumentId = (StringProperty) result.getProperty("nt:targetDocumentId");
+				
+
+				log.info("Check target document "+targetDocumentId.getValue());
+				
+				queryBuilder.nxql(String.format(PROC_RELATED, targetDocumentId.getValue()));
+				DocumentModelList pis = service.query(queryBuilder);
+				
+				if(pis.size() == 0) {
+					taskIds.add(result.getId());
+				}
+				else {
+					log.info("Skip task "+result.getId()+". A procedure is linked : "+pis.get(0).getId());
+
+				}
+					
+			}
+			
+			
+			for (String taskId : taskIds) {
+
+				try {
+					session.removeDocument(new IdRef(taskId));
+					t++;
+				}
+				catch(ClientException e) {
+					log.error("Failed to remove task "+taskId);
+					tErr++;
+					
+					unrefElasticsearchDoc(taskId);
+					
+				}
+			}
+			
+			log.info("Remove "+t+" ended task(s). Unlink "+tErr+ " task(s) on ES ");
+			
+
+				
+		}
+
         
         
         private void unrefElasticsearchDoc(String rootID) {
