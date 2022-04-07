@@ -1,0 +1,70 @@
+<component name="foad.bbb.types">
+
+	<require>org.nuxeo.ecm.core.schema.TypeService</require>
+	<require>org.nuxeo.ecm.platform.types.TypeService</require>
+	<require>org.nuxeo.ecm.core.lifecycle.LifeCycleService</require>
+
+	<extension target="org.nuxeo.ecm.core.schema.TypeService"
+		point="doctype">
+
+		<doctype name="Visio" extends="Document">
+			<schema name="visio" />
+			<schema name="dublincore" />
+			<schema name="common" />	
+		</doctype>
+
+	</extension>
+	
+	<extension target="org.nuxeo.ecm.core.schema.TypeService"
+		point="schema">
+
+		<schema name="visio" prefix="visio"
+			src="schemas/visio.xsd" />
+
+	</extension>
+	
+
+	<extension target="org.nuxeo.ecm.platform.types.TypeService"
+		point="types">
+
+		<type id="Workspace">
+			<subtypes>
+				<type>Visio</type>
+			</subtypes>
+		</type>
+		<type id="Room">
+			<subtypes>
+				<type>Visio</type>
+			</subtypes>
+		</type>
+
+		<type id="Visio">
+			<label>Visioconférence BigBlueButton</label>
+			<category>SimpleDocument</category>
+			<icon>/icons/BigBlueButton.png</icon>
+			<bigIcon>/icons/BigBlueButton.png</bigIcon>
+			<icon-expanded>/icons/BigBlueButton.png</icon-expanded>
+			<description></description>
+			<default-view>view_documents</default-view>
+			<layouts mode="any">
+				<layout>heading</layout>
+			</layouts>
+			<layouts mode="edit">
+				<layout>heading</layout>
+				<layout>dublincore</layout>
+			</layouts>
+		</type>		
+		
+		
+	</extension>
+
+	<extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService"
+		point="types">
+
+		<types>
+			<type name="Visio">default_toutatice</type>
+		</types>
+
+	</extension>
+
+</component>
