@@ -8,21 +8,12 @@
 		point="doctype">
 
 		<doctype name="Visio" extends="Document">
-			<schema name="visio" />
 			<schema name="dublincore" />
 			<schema name="common" />	
 		</doctype>
 
 	</extension>
-	
-	<extension target="org.nuxeo.ecm.core.schema.TypeService"
-		point="schema">
 
-		<schema name="visio" prefix="visio"
-			src="schemas/visio.xsd" />
-
-	</extension>
-	
 
 	<extension target="org.nuxeo.ecm.platform.types.TypeService"
 		point="types">
