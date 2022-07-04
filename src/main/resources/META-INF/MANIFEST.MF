@@ -12,4 +12,5 @@ Nuxeo-Component: OSGI-INF/extensions/layouts-contrib.xml,
  OSGI-INF/extensions/wf-cleanup-contrib.xml,
  OSGI-INF/extensions/ui-contrib.xml,
  OSGI-INF/extensions/bbb/types-contrib.xml,
+ OSGI-INF/extensions/workflows-contrib.xml,
  

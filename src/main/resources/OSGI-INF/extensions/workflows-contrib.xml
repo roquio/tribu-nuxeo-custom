@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<component name="foad.wf.validation">
+
+	<require>org.nuxeo.ecm.platform.task.core.pageproviders</require>
+	<require>org.nuxeo.ecm.platform.routing.actions</require>
+
+	<!-- Surcharge requête pour ne plus requêtet nt:targetDocumentIds et delegatedActors -->
+	<extension point="providers"
+		target="org.nuxeo.ecm.platform.query.api.PageProviderService">
+
+		<coreQueryPageProvider
+			name="GET_TASKS_FOR_TARGET_DOCUMENTS_AND_ACTORS_OR_DELEGATED_ACTORS">
+			<pattern>
+				SELECT * FROM Document WHERE ecm:mixinType = 'Task' AND
+				ecm:currentLifeCycleState
+				NOT IN ('ended', 'cancelled') AND
+				ecm:isProxy =
+				0 AND (nt:targetDocumentId = ?) AND (nt:targetDocumentId = ?) AND
+				(nt:actors/* IN ?) AND (nt:actors/* IN ?)
+			</pattern>
+			<pageSize>0</pageSize>
+			<maxPageSize>0</maxPageSize>
+		</coreQueryPageProvider>
+
+	</extension>
+
+	<!-- D&sactivation de la délégation sur les workflows -->
+	<extension
+		target="org.nuxeo.ecm.platform.actions.ActionService" point="actions">
+
+		<action id="reassignTask" label="label.workflow.task.reassign"
+			order="100" type="fancybox">
+			<category>TASK_ADDITIONAL_ACTIONS</category>
+			<properties>
+				<property name="include">/incl/tasks/task_reassignment_box.xhtml
+				</property>
+				<property name="autoDimensions">true</property>
+				<property name="modal">true</property>
+				<property name="scrolling">auto</property>
+				<property name="ajaxSupport">true</property>
+			</properties>
+			<filter-id>always_disabled</filter-id>
+		</action>
+	</extension>
+
+	<extension point="filters"
+		target="org.nuxeo.ecm.platform.actions.ActionService">
+		<filter id="always_disabled">
+			<rule grant="false">
+			</rule>
+		</filter>
+	</extension>
+
+</component>
