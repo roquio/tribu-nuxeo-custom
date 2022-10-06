@@ -1,6 +1,5 @@
 package fr.gouv.education.foad.wf.cleaner;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,7 +19,6 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
-import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.api.model.impl.primitives.StringProperty;
 import org.nuxeo.elasticsearch.api.ElasticSearchIndexing;
 import org.nuxeo.elasticsearch.api.ElasticSearchService;
@@ -55,10 +53,11 @@ public class TtcWfCleaner {
         private static final String TASK_RELATED = "SELECT * FROM Document WHERE ecm:mixinType = 'Task' AND nt:processId = '%s'"
               + " AND ecm:isVersion = 0";
         
-        private static final String OLD_PROC_INSTANCES = "SELECT * FROM Document WHERE ecm:primaryType = 'ProcedureInstance' AND dc:modified <= DATE '%s' ORDER BY dc:created";        
+        private static final String OLD_INVIT_INSTANCES = "SELECT * FROM Document WHERE ecm:primaryType = 'ProcedureInstance' AND pi:procedureModelWebId <> 'procedure_quota_exceeding' AND dc:modified <= DATE '%s' ORDER BY dc:created";
 
-        
-        
+		private static final String OLD_QUOTA_INSTANCES = "SELECT * FROM Document WHERE ecm:primaryType = 'ProcedureInstance' AND pi:procedureModelWebId = 'procedure_quota_exceeding' AND dc:created <= DATE '%s' ORDER BY dc:created";
+
+
     	public static final String OLD_DOCUMENT_ROUTE_RUNNING =  "SELECT * FROM DocumentRoute WHERE ecm:currentLifeCycleState = 'running' "
                 + " AND docri:variablesFacet = 'facet-var_generic-model' AND dc:created <= DATE '%s' ORDER BY dc:created";  
         private static final String PROC_RELATED = "SELECT * FROM Document WHERE ecm:primaryType = 'ProcedureInstance' AND ecm:uuid = '%s'";        
@@ -86,7 +85,7 @@ public class TtcWfCleaner {
 
         @Override
         public void run() {
-        	
+
 			ElasticSearchService service = Framework.getService(ElasticSearchService.class);
 			
 			if (service != null) {
@@ -95,50 +94,48 @@ public class TtcWfCleaner {
 				removeOpenRoutes(service);
 				
 				removeEndedTasks(service);
-				
-	            
-	    		Date referenceDate = new Date();
-	    		Calendar c = Calendar.getInstance(); 
-	    		c.setTime(referenceDate); 
-	    		c.add(Calendar.MONTH, -2);
-	    		referenceDate = c.getTime();
-	    		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
-	    		String formattedDate = sdf.format(referenceDate);
-	    		
-	    		NxQueryBuilder queryBuilder2 = new NxQueryBuilder(session);
-	    		
-	    		queryBuilder2.nxql(String.format(OLD_PROC_INSTANCES, formattedDate));
-	    		queryBuilder2.limit(proceduresLimit);
-            	
-				DocumentModelList oldPIs = service.query(queryBuilder2);
-				List<String> procids = new ArrayList<>();
-				for (DocumentModel pi : oldPIs) {
-					procids.add(pi.getId());
-				}
-				
-				
-				for (String id : procids) {
 
-					try {
-						session.removeDocument(new IdRef(id));
-						p++;
-					}
-					catch(ClientException e) {
-						log.error("Failed to remove procedure "+id);
-						pErr++;
-						
-						unrefElasticsearchDoc(id);
-					}
-				}
-				log.info("Remove "+p+" procedure(s). Unlink "+pErr+ " procedure(s) on ES ");
-	
-	    		
+				removeProcedures(service, OLD_INVIT_INSTANCES, "invitations");
+
+				removeProcedures(service, OLD_QUOTA_INSTANCES, "quota");
 			}
 			else {
 				throw new ClientException("TtcWfCleaner requires ElasticsearchService");
 			}
             
         }
+
+		private void removeProcedures(ElasticSearchService service, String query, String info) {
+			Date referenceDate = new Date();
+			Calendar c = Calendar.getInstance();
+			c.setTime(referenceDate);
+			c.add(Calendar.MONTH, -2);
+			referenceDate = c.getTime();
+			SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+			String formattedDate = sdf.format(referenceDate);
+
+			NxQueryBuilder queryBuilder2 = new NxQueryBuilder(session);
+
+			queryBuilder2.nxql(String.format(query, formattedDate));
+			queryBuilder2.limit(proceduresLimit);
+
+			DocumentModelList oldPIs = service.query(queryBuilder2);
+			List<String> procids = new ArrayList<>();
+			for (DocumentModel pi : oldPIs) {
+				procids.add(pi.getId());
+			}
+
+
+			for (String id : procids) {
+
+				boolean success = removeAndSave(id, "Procedure invitation");
+
+				if(success)
+					p++;
+				else pErr++;
+			}
+			log.info("Remove "+p+" procedure(s) "+info+". Unlink "+pErr+ " procedure(s) on ES ");
+		}
 
 		private void removeOpenRoutes(ElasticSearchService service) {
 			
@@ -186,33 +183,22 @@ public class TtcWfCleaner {
 				t = 0;
 				for (DocumentModel task : tasks) {
 
-					try {
-						session.removeDocument(new IdRef(task.getId()));
+					boolean success = removeAndSave(task.getId(), "Task");
+
+					if(success)
 						t++;
-					}
-					catch(ClientException e) {
-						log.error("Failed to remove task "+task.getId());
-						tErr++;
-						
-						unrefElasticsearchDoc(task.getId());
-						
-					}
+					else tErr++;
+
 				}
 				if(t > 0) {
 					log.info("Remove "+t+" opened task(s). Unlink "+tErr+ " task(s) on ES ");
 				}
-				
-				try {
-					session.removeDocument(new IdRef(routeDocId));
+
+				boolean success = removeAndSave(routeDocId, "Route");
+
+				if(success)
 					i++;
-					
-				}
-				catch(ClientException e) {
-					log.error("Failed to remove documentroute "+routeDocId);
-					iErr++;
-					
-					unrefElasticsearchDoc(routeDocId);
-				}
+				else iErr++;
 				
 
 			}
@@ -241,33 +227,22 @@ public class TtcWfCleaner {
 				t = 0;
 				for (DocumentModel task : tasks) {
 
-					try {
-						session.removeDocument(new IdRef(task.getId()));
+					boolean success = removeAndSave(task.getId(), "Task");
+
+					if(success)
 						t++;
-					}
-					catch(ClientException e) {
-						log.error("Failed to remove task "+task.getId());
-						tErr++;
-						
-						unrefElasticsearchDoc(task.getId());
-						
-					}
+					else tErr++;
+
 				}
 				if(t > 0) {
 					log.info("Remove "+t+" closed task(s). Unlink "+tErr+ " task(s) on ES ");
 				}
-				
-				try {
-					session.removeDocument(new IdRef(routeDocId));
+
+				boolean success = removeAndSave(routeDocId, "Route");
+
+				if(success)
 					i++;
-					
-				}
-				catch(ClientException e) {
-					log.error("Failed to remove documentroute "+routeDocId);
-					iErr++;
-					
-					unrefElasticsearchDoc(routeDocId);
-				}
+				else iErr++;
 				
 
 			}
@@ -323,16 +298,11 @@ public class TtcWfCleaner {
 				
 				for(DocumentModel task : tasks) {
 
-					try {
-						session.removeDocument(new IdRef(task.getId()));
+					boolean success = removeAndSave(task.getId(), "Task");
+
+					if(success)
 						t++;
-					}
-					catch(ClientException e) {
-						log.error("Failed to remove task "+task.getId());
-						tErr++;
-						
-						
-					}
+					else tErr++;
 				}
 
 			}
@@ -366,6 +336,27 @@ public class TtcWfCleaner {
                        
             
         }
+
+		private boolean removeAndSave(String docId, String type) throws ClientException {
+
+			try {
+				session.removeDocument(new IdRef(docId));
+				session.save();
+
+				log.debug("remove "+type+" "+docId);
+
+				return true;
+			}
+			catch(ClientException e) {
+				log.error("Failed to remove "+type+" "+docId);
+
+				unrefElasticsearchDoc(docId);
+
+				return false;
+
+			}
+
+		}
     }
     
 }

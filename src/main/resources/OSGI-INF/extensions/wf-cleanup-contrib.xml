@@ -10,7 +10,7 @@
     <schedule id="proceduresInstancesAndWfCleanup">
       <eventId>proceduresInstancesAndWfCleanup</eventId>
       <!-- every hour -->
-      <cronExpression>0 */30 * * * ?</cronExpression>
+      <cronExpression>0 0 0-8,18-23 * * ?</cronExpression>
     </schedule>
    </extension>
 

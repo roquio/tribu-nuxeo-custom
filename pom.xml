@@ -51,18 +51,33 @@
 			<groupId>opentoutatice-ecm.platform</groupId>
 			<artifactId>opentoutatice-ecm-platform-core</artifactId>
 			<version>4.4.19.3</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.phloc</groupId>
+					<artifactId>phloc-css</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.nuxeo.elasticsearch</groupId>
 			<artifactId>nuxeo-elasticsearch-core</artifactId>
 			<version>6.1.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.phloc</groupId>
+					<artifactId>phloc-css</artifactId>
+				</exclusion>
+			</exclusions>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.elasticsearch</groupId>
 			<artifactId>elasticsearch</artifactId>
 			<version>1.1.2</version>
+			<scope>provided</scope>
 		</dependency>	
 	</dependencies>
 
