@@ -11,6 +11,9 @@
 		target="org.nuxeo.ecm.core.operation.OperationServiceComponent"
 		point="operations">
 
+
+		<operation
+				class="fr.gouv.education.foad.data.GetDuplicateFilesByWebId" />
 		<operation
 			class="fr.gouv.education.foad.bns.GetDuplicateFiles" />
 
