@@ -15,6 +15,7 @@ import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
+import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -36,7 +37,11 @@ import java.util.Map;
 public class GetDuplicateFilesByWebId {
 
     public static final String ID = "Document.GetDuplicateFilesByWebId";
-    
+
+
+	@Param(name = "numResults", required = false)
+	protected String numResults = "10000";
+
     @Context
     protected CoreSession session;
     
@@ -58,7 +63,7 @@ public class GetDuplicateFilesByWebId {
 
 		request.setQuery(queryBuilder);
 		// Sum aggregation
-		TermsBuilder aggregation = AggregationBuilders.terms("top_ttc:webid").field("ttc:webid").size(10000)
+		TermsBuilder aggregation = AggregationBuilders.terms("top_ttc:webid").field("ttc:webid").size(Integer.parseInt(numResults))
 				.order(Terms.Order.aggregation("_count", false));;
 
 		request.addAggregation(aggregation);
