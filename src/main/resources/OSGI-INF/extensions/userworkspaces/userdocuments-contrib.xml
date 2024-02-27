@@ -1,0 +1,45 @@
+<component name="foad.userworkspaces">
+
+    <require>org.nuxeo.ecm.platform.userworkspace.UserWorkspaceService
+    </require>
+    <require>fr.toutatice.ecm.platform.core.userworkspace</require>
+    <require>org.nuxeo.ecm.user.center.profile.listeners.contrib</require>
+
+
+    <!-- Surcharge userworkspaces pour désactiver le mode synchrone de création d'espaces -->
+    <extension target="org.nuxeo.ecm.platform.userworkspace.UserWorkspaceService"
+            point="userWorkspace">
+
+        <userWorkspace class="fr.gouv.education.foad.userworkspaces.TribuUserWorkspacesServiceImpl"/>
+    </extension>
+
+    <!-- Automation création d'espaces  -->
+    <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent"
+               point="operations">
+        <operation class="fr.gouv.education.foad.userworkspaces.automation.AskUserProfileCreation" />
+    </extension>
+
+    <!-- File de création d'espaces -->
+    <extension point="queues"
+               target="org.nuxeo.ecm.core.work.service">
+        <queue id="userprofile-creation-queue">
+            <name>userprofile-creation-queue</name>
+            <maxThreads>1</maxThreads>
+            <category>USERPROFILE_CREATION</category>
+        </queue>
+    </extension>
+
+    <extension target="org.nuxeo.ecm.core.event.EventServiceComponent"
+               point="listener">
+
+        <listener name="timezoneSelector"
+                  class="org.nuxeo.ecm.user.center.profile.localeProvider.UserLocaleSelectorListener"
+                  priority="200">
+            <!-- Disable listener on locale profile
+            <event>documentModified</event>
+            <event>documentCreated</event>
+            -->
+        </listener>
+    </extension>
+
+</component>

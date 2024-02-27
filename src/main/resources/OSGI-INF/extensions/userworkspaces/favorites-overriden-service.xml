@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="foad.favorites">
+
+    <require>org.nuxeo.ecm.core.repository.RepositoryServiceComponent</require>
+
+    <alias>org.nuxeo.ecm.collections.api.FavoritesManager</alias>
+
+    <implementation class="fr.gouv.education.foad.userworkspaces.favorites.TribuFavoritesManagerImpl"/>
+
+    <service>
+        <provide interface="org.nuxeo.ecm.collections.api.FavoritesManager"/>
+    </service>
+
+</component>

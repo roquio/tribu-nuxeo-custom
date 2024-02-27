@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<component name="foad.userprofile">
+
+    <require>fr.toutatice.ecm.collab.tools.userprofile.service</require>
+
+    <implementation class="fr.gouv.education.foad.userworkspaces.TribuUserProfileServiceImpl" />
+
+    <documentation>
+        Component and Service to manage the user profile
+
+        - Patch for performance, query ES for UserProfiles
+        - Async method for creation
+    </documentation>
+
+    <service>
+        <provide interface="org.nuxeo.ecm.user.center.profile.UserProfileService" />
+    </service>
+
+</component>
