@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<component
+	name="foad.actions" version="1.0">
+
+	<require>org.nuxeo.ecm.platform.actions.ActionService</require>
+
+	<extension target="org.nuxeo.ecm.platform.actions.ActionService"
+			   point="actions">
+
+		<!-- Actions d'exportatio limitées aux admiinstrateurs -->
+		<action id="xmlTreeExport" order="18">
+			<filter-id>isGlobalAdministrator</filter-id>
+		</action>
+		<action id="xmlExport">
+			<filter-id>isGlobalAdministrator</filter-id>
+		</action>
+		<action id="WORKLIST_XMLEXPORT">
+			<filter-id>isGlobalAdministrator</filter-id>
+		</action>
+
+
+		<action id="exportView" enabled="false" />
+		<action id="foad_exportView" link="export" order="21"
+				label="label.exportview" icon="/icons/export.png">
+			<category>DOCUMENT_UPPER_ACTION</category>
+			<filter-id>isGlobalAdministrator</filter-id>
+		</action>
+
+		<action id="exportViewPDFExport" enabled="false" />
+
+	</extension>
+
+</component>
