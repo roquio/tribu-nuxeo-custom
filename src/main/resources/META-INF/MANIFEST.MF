@@ -17,4 +17,12 @@ Nuxeo-Component: OSGI-INF/extensions/layouts-contrib.xml,
  OSGI-INF/extensions/userworkspaces/favorites-overriden-service.xml,
  OSGI-INF/extensions/userworkspaces/userdocuments-contrib.xml,
  OSGI-INF/extensions/userworkspaces/userprofile-overriden-service.xml,
+ OSGI-INF/extensions/dam/audio-core-types-contrib.xml,
+ OSGI-INF/extensions/dam/audio-ecm-types-contrib.xml,
+ OSGI-INF/extensions/dam/audio-filemanager-importer-contrib.xml,
+ OSGI-INF/extensions/dam/audio-lifecycle-contrib.xml,
+ OSGI-INF/extensions/dam/video-core-types-contrib.xml,
+ OSGI-INF/extensions/dam/video-filemanager-importer-contrib.xml,
+ OSGI-INF/extensions/dam/video-lifecycle-contrib.xml,
+ OSGI-INF/extensions/dam/video-ui-types-contrib.xml
 
