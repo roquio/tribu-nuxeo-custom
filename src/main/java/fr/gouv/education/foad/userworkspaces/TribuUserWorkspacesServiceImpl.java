@@ -90,11 +90,12 @@ public class TribuUserWorkspacesServiceImpl extends DefaultUserWorkspaceServiceI
             rootref = new PathRef(userWorkspaceRoot.getPathAsString());
         }
 
-        PathRef existingUserWorkspace = getExistingUserWorkspace(session, rootref, session.getPrincipal(), username);
+        // Resolve the User workspace path with permissions of the given user, to avoid path collision
+        CoreSession userSession = CoreInstance.openCoreSession(null, username);
+
+        PathRef existingUserWorkspace = getExistingUserWorkspace(userSession, rootref, userSession.getPrincipal(), username);
         if(existingUserWorkspace == null) {
 
-            // Resolve the User workspace path with permissions of the given user, to avoid path collision
-            CoreSession userSession = CoreInstance.openCoreSession(null, username);
             PathRef uwcompatref = resolveUserWorkspace(userSession, rootref, username, IdUtils.generateId(username, "-", false, 30), 30);
             userSession.close();
 
