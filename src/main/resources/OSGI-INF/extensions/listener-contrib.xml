@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<component name="foad.listeners">
+
+    <require>fr.toutatice.ecm.platform.core.eventlistener</require>
+
+    <listener name="toutaticeDeletelistener"
+              enabled="false">
+    </listener>
+
+</component>
+
