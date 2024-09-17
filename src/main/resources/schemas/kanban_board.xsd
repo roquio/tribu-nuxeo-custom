@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<xs:schema targetNamespace="https://tribu.phm.education.gouv.fr/schemas/kanban-board/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:kbb="https://tribu.phm.education.gouv.fr/schemas/kanban-board/">
+    <xs:complexType name="compartment">
+        <xs:sequence>
+            <xs:element name="compartmentId" type="xs:string"/>
+            <xs:element name="title" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="compartments">
+        <xs:sequence>
+            <xs:element name="compartment" type="kbb:compartment" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="compartments" type="kbb:compartments"/>
+</xs:schema>

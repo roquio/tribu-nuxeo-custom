@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<xs:schema targetNamespace="https://tribu.phm.education.gouv.fr/schemas/kanban-card/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:kbc="https://tribu.phm.education.gouv.fr/schemas/kanban-card/">
+    <xs:simpleType name="stringList">
+        <xs:list itemType="xs:string"/>
+    </xs:simpleType>
+
+    <xs:complexType name="control">
+        <xs:sequence>
+            <xs:element name="controlId" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="done" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="controls">
+        <xs:sequence>
+            <xs:element name="control" type="kbc:control" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="compartmentId" type="xs:string"/>
+    <xs:element name="position" type="xs:integer"/>
+    <xs:element name="startDate" type="xs:date"/>
+    <xs:element name="dueDate" type="xs:date"/>
+    <xs:element name="affected" type="kbc:stringList"/>
+    <xs:element name="color" type="xs:string"/>
+    <xs:element name="controls" type="kbc:controls"/>
+</xs:schema>

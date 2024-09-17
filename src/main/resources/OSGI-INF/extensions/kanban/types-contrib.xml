@@ -1,0 +1,104 @@
+<component name="tribu.kanban.types">
+    <require>org.nuxeo.ecm.core.schema.TypeService</require>
+    <require>org.nuxeo.ecm.platform.types.TypeService</require>
+    <require>org.nuxeo.ecm.core.lifecycle.LifeCycleService</require>
+
+
+    <extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
+        <doctype name="KanbanFolder" extends="Document">
+            <schema name="dublincore"/>
+            <facet name="Folderish"/>
+        </doctype>
+
+        <doctype name="KanbanBoard" extends="Document">
+            <schema name="dublincore"/>
+            <schema name="kanban_board"/>
+            <facet name="Folderish"/>
+        </doctype>
+
+        <doctype name="KanbanCard" extends="Document">
+            <schema name="dublincore"/>
+            <schema name="kanban_card"/>
+            <schema name="note"/>
+            <schema name="files"/>
+        </doctype>
+    </extension>
+
+
+    <extension target="org.nuxeo.ecm.platform.types.TypeService" point="types">
+        <type id="Workspace">
+            <subtypes>
+                <type>KanbanFolder</type>
+            </subtypes>
+        </type>
+
+        <type id="Room">
+            <subtypes>
+                <type>KanbanFolder</type>
+            </subtypes>
+        </type>
+
+        <type id="KanbanFolder">
+            <label>Dossier de tableaux Kanban</label>
+            <category>SimpleDocument</category>
+            <icon>/icons/folder.gif</icon>
+            <bigIcon>/icons/folder.gif</bigIcon>
+            <icon-expanded>/icons/folder.gif</icon-expanded>
+            <default-view>view_documents</default-view>
+            <layouts mode="any">
+                <layout>heading</layout>
+            </layouts>
+            <layouts mode="edit">
+                <layout>heading</layout>
+                <layout>dublincore</layout>
+            </layouts>
+            <subtypes>
+                <type>KanbanBoard</type>
+            </subtypes>
+        </type>
+
+        <type id="KanbanBoard">
+            <label>Tableau Kanban</label>
+            <category>SimpleDocument</category>
+            <icon>/icons/folder.gif</icon>
+            <bigIcon>/icons/folder.gif</bigIcon>
+            <icon-expanded>/icons/folder.gif</icon-expanded>
+            <default-view>view_documents</default-view>
+            <layouts mode="any">
+                <layout>heading</layout>
+            </layouts>
+            <layouts mode="edit">
+                <layout>heading</layout>
+                <layout>dublincore</layout>
+            </layouts>
+            <subtypes>
+                <type>KanbanCard</type>
+            </subtypes>
+        </type>
+
+        <type id="KanbanCard">
+            <label>Carte Kanban</label>
+            <category>SimpleDocument</category>
+            <icon>/icons/file.gif</icon>
+            <bigIcon>/icons/file.gif</bigIcon>
+            <icon-expanded>/icons/file.gif</icon-expanded>
+            <default-view>view_documents</default-view>
+            <layouts mode="any">
+                <layout>heading</layout>
+            </layouts>
+            <layouts mode="edit">
+                <layout>heading</layout>
+                <layout>dublincore</layout>
+            </layouts>
+        </type>
+    </extension>
+
+
+    <extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService" point="types">
+        <types>
+            <type name="KanbanFolder">default_toutatice</type>
+            <type name="KanbanBoard">default_toutatice</type>
+            <type name="KanbanCard">default_toutatice</type>
+        </types>
+    </extension>
+</component>
