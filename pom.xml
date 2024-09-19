@@ -13,6 +13,8 @@
 
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <nuxeo.version>6.1.4</nuxeo.version>
         <opentoutatice.version>4.4.33</opentoutatice.version>
         <elasticsearch.version>1.1.2</elasticsearch.version>
@@ -71,9 +73,21 @@
 
     <build>
         <plugins>
+            <!-- Compiler -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
             <!--Jar-->
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.1</version>
                 <configuration>
                     <archive>
                         <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
