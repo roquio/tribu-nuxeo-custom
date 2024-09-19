@@ -129,11 +129,23 @@
     </build>
 
 
+    <repositories>
+        <repository>
+            <id>roquio-maven-public</id>
+            <name>Roquio Maven public</name>
+            <url>https://packages.roqu.io/repository/maven-public</url>
+        </repository>
+    </repositories>
+
+
     <distributionManagement>
         <repository>
             <id>roquio-maven-releases</id>
             <name>Roquio Maven releases</name>
             <url>https://packages.roqu.io/repository/maven-releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
         </repository>
     </distributionManagement>
 
