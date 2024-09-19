@@ -1,99 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<modelVersion>4.0.0</modelVersion>
-	
-	<parent>
-	    <groupId>fr.gouv.education.foad</groupId>
-    	<artifactId>foad-parent</artifactId>
-    	<version>4.4-SNAPSHOT</version>
-	</parent>
+    <groupId>fr.gouv.education.foad</groupId>
+    <artifactId>foad-nuxeo-custom</artifactId>
+    <version>4.4-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
-	<artifactId>foad-nuxeo-custom</artifactId>
-	<packaging>jar</packaging>
-    
-    <name>FOAD - Custom Nuxeo</name>
+    <name>Tribu - Add-on Nuxeo</name>
 
-	<build>
-		<plugins>
-		
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3</version>
-				<configuration>
-					<archive>
-						<manifestFile>src/main/resources/META-INF/MANIFEST.MF
-						</manifestFile>
-						<manifestEntries>
-							<Bundle-Version>${eclipseVersion}-t${buildNumber}
-							</Bundle-Version>
-							<Bundle-ManifestVersion>2</Bundle-ManifestVersion>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin> 		
-		</plugins>			
-	</build>
-	
-	<dependencies>
-		<dependency>
-			<groupId>opentoutatice-ecm.platform</groupId>
-			<artifactId>opentoutatice-ecm-platform-core</artifactId>
-			<version>4.4.33</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.phloc</groupId>
-					<artifactId>phloc-css</artifactId>
-				</exclusion>
-			</exclusions>
-			<scope>provided</scope>
-		</dependency>
 
-		<dependency>
-			<groupId>opentoutatice-ecm.collab-tools</groupId>
-			<artifactId>opentoutatice-collab-tools-ecm</artifactId>
-			<version>4.4.33</version>
-			<scope>provided</scope>
+    <properties>
+        <nuxeo.version>6.1.4</nuxeo.version>
+        <opentoutatice.version>4.4.33</opentoutatice.version>
+        <elasticsearch.version>1.1.2</elasticsearch.version>
+    </properties>
 
-		</dependency>
-		
-		<dependency>
-			<groupId>org.nuxeo.elasticsearch</groupId>
-			<artifactId>nuxeo-elasticsearch-core</artifactId>
-			<version>6.1.4</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.phloc</groupId>
-					<artifactId>phloc-css</artifactId>
-				</exclusion>
-			</exclusions>
-			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.elasticsearch</groupId>
-			<artifactId>elasticsearch</artifactId>
-			<version>1.1.2</version>
-			<scope>provided</scope>
-		</dependency>
 
-		<dependency>
-			<groupId>org.nuxeo.ecm.platform</groupId>
-			<artifactId>nuxeo-platform-collections-core</artifactId>
-			<version>6.1.4</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>opentoutatice-ecm.platform</groupId>
+            <artifactId>opentoutatice-ecm-platform-core</artifactId>
+            <version>${opentoutatice.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.phloc</groupId>
+                    <artifactId>phloc-css</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>opentoutatice-ecm.collab-tools</groupId>
+            <artifactId>opentoutatice-collab-tools-ecm</artifactId>
+            <version>${opentoutatice.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.nuxeo.elasticsearch</groupId>
+            <artifactId>nuxeo-elasticsearch-core</artifactId>
+            <version>${nuxeo.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.phloc</groupId>
+                    <artifactId>phloc-css</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>${elasticsearch.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.nuxeo.ecm.platform</groupId>
+            <artifactId>nuxeo-platform-collections-core</artifactId>
+            <version>${nuxeo.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                        <manifestEntries>
+                            <Bundle-Version>${project.version}</Bundle-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+    <distributionManagement>
+        <repository>
+            <id>roquio-maven-releases</id>
+            <name>Roquio Maven releases</name>
+            <url>https://packages.roqu.io/repository/maven-releases</url>
+        </repository>
+    </distributionManagement>
 
 </project>
