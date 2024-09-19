@@ -71,6 +71,7 @@
 
     <build>
         <plugins>
+            <!--Jar-->
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
@@ -80,6 +81,34 @@
                             <Bundle-Version>${project.version}</Bundle-Version>
                         </manifestEntries>
                     </archive>
+                </configuration>
+            </plugin>
+
+            <!--GitFlow-->
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>1.21.0</version>
+                <configuration>
+                    <gitFlowConfig>
+                        <productionBranch>main</productionBranch>
+                        <developmentBranch>develop</developmentBranch>
+                        <featureBranchPrefix>feature/</featureBranchPrefix>
+                        <releaseBranchPrefix>release/</releaseBranchPrefix>
+                        <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
+                        <supportBranchPrefix>support/</supportBranchPrefix>
+                        <versionTagPrefix/>
+                        <origin>origin</origin>
+                    </gitFlowConfig>
+
+                    <commitMessages>
+                        <releaseStartMessage>🔖 Version @{version}</releaseStartMessage>
+                        <releaseFinishMessage>🔖 Version @{version}</releaseFinishMessage>
+                        <versionUpdateMessage>🔖 Version @{version}</versionUpdateMessage>
+                    </commitMessages>
+
+                    <digitsOnlyDevVersion>true</digitsOnlyDevVersion>
+                    <updateVersionDigitToIncrement>3</updateVersionDigitToIncrement>
                 </configuration>
             </plugin>
         </plugins>
