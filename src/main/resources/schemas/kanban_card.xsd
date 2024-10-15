@@ -25,6 +25,6 @@
     <xs:element name="startDate" type="xs:date"/>
     <xs:element name="dueDate" type="xs:date"/>
     <xs:element name="affected" type="kbc:stringList"/>
-    <xs:element name="color" type="xs:string"/>
+    <xs:element name="colors" type="kbc:stringList"/>
     <xs:element name="controls" type="kbc:controls"/>
 </xs:schema>
