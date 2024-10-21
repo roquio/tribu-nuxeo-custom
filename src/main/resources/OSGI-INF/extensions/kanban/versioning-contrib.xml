@@ -1,0 +1,24 @@
+<component name="tribu.kanban.versioning">
+    <require>org.nuxeo.ecm.core.versioning.VersioningService</require>
+
+
+    <extension point="versioningRules" target="org.nuxeo.ecm.core.versioning.VersioningService">
+        <versioningRule typeName="KanbanBoard">
+            <initialState major="1" minor="0"/>
+            <options lifeCycleState="project">
+                <none/>
+                <minor default="true"/>
+                <major/>
+            </options>
+        </versioningRule>
+
+        <versioningRule typeName="KanbanCard">
+            <initialState major="1" minor="0"/>
+            <options lifeCycleState="project">
+                <none/>
+                <minor default="true"/>
+                <major/>
+            </options>
+        </versioningRule>
+    </extension>
+</component>
