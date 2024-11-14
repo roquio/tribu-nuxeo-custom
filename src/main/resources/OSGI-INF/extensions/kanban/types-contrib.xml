@@ -21,6 +21,7 @@
             <schema name="kanban_card"/>
             <schema name="note"/>
             <schema name="files"/>
+            <facet name="Commentable"/>
         </doctype>
     </extension>
 
