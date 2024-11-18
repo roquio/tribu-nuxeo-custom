@@ -20,8 +20,8 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:element name="compartmentId" type="xs:string"/>
-    <xs:element name="position" type="xs:integer"/>
+    <xs:element name="compartmentId" type="xs:string"/> <!--TODO déprécié, à supprimer-->
+    <xs:element name="position" type="xs:integer"/> <!--TODO déprécié, à supprimer-->
     <xs:element name="startDate" type="xs:date"/>
     <xs:element name="dueDate" type="xs:date"/>
     <xs:element name="affected" type="kbc:stringList"/>
