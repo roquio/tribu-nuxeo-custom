@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<component name="tribu.kanban.policies">
+
+    <require>fr.toutatice.ecm.plateform.core.permissions</require>
+
+    <extension point="policies"
+               target="org.nuxeo.ecm.core.security.SecurityService">
+
+        <policy
+                class="fr.gouv.education.foad.kanban.policies.KanbanPolicy"
+                name="ottcOwner" order="1" />
+
+
+    </extension>
+
+</component>

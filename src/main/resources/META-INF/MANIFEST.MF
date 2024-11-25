@@ -28,4 +28,6 @@ Nuxeo-Component: OSGI-INF/extensions/layouts-contrib.xml,
  OSGI-INF/extensions/dam/video-ui-types-contrib.xml,
  OSGI-INF/extensions/kanban/types-contrib.xml,
  OSGI-INF/extensions/kanban/schemas-contrib.xml,
- OSGI-INF/extensions/kanban/versioning-contrib.xml
+ OSGI-INF/extensions/kanban/versioning-contrib.xml,
+ OSGI-INF/extensions/kanban/policies-permissions-contrib.xml
+
